@@ -1,0 +1,4086 @@
+<!DOCTYPE html><html lang="zh-cn" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Map 与 unordered_map 横向与纵向测试，附带原始数据与测试程序 | 风的彷徨的博客</title><meta name="author" content="风的彷徨"><meta name="copyright" content="风的彷徨"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="写程序时，面临用Map还是unordered_map，总是很纠结，于是写了个程序进行测试  Map 与 unordered_map 横向与纵向测试，附带原始数据与测试程序配置   配件 信息    CPU Intel® Pentium(R) CPU G3260 @ 3.30GHz × 2   内存 7.6 GiB   系统 Ubuntu 20.04.1 LTS   编译器 g++-9   编译选">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Map 与 unordered_map 横向与纵向测试，附带原始数据与测试程序">
+<meta property="og:url" content="https://www.pchar.cn/2024/03/25/Map-%E4%B8%8E-unordered-map-%E6%A8%AA%E5%90%91%E4%B8%8E%E7%BA%B5%E5%90%91%E6%B5%8B%E8%AF%95%EF%BC%8C%E9%99%84%E5%B8%A6%E5%8E%9F%E5%A7%8B%E6%95%B0%E6%8D%AE%E4%B8%8E%E6%B5%8B%E8%AF%95%E7%A8%8B%E5%BA%8F/index.html">
+<meta property="og:site_name" content="风的彷徨的博客">
+<meta property="og:description" content="写程序时，面临用Map还是unordered_map，总是很纠结，于是写了个程序进行测试  Map 与 unordered_map 横向与纵向测试，附带原始数据与测试程序配置   配件 信息    CPU Intel® Pentium(R) CPU G3260 @ 3.30GHz × 2   内存 7.6 GiB   系统 Ubuntu 20.04.1 LTS   编译器 g++-9   编译选">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.pchar.cn/cover/r2.webp">
+<meta property="article:published_time" content="2024-03-24T16:04:46.000Z">
+<meta property="article:modified_time" content="2024-03-24T16:05:26.034Z">
+<meta property="article:author" content="风的彷徨">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="数据结构">
+<meta property="article:tag" content="算法测试">
+<meta property="article:tag" content="STL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.pchar.cn/cover/r2.webp"><link rel="shortcut icon" href="/img/logo.png"><link rel="canonical" href="https://www.pchar.cn/2024/03/25/Map-%E4%B8%8E-unordered-map-%E6%A8%AA%E5%90%91%E4%B8%8E%E7%BA%B5%E5%90%91%E6%B5%8B%E8%AF%95%EF%BC%8C%E9%99%84%E5%B8%A6%E5%8E%9F%E5%A7%8B%E6%95%B0%E6%8D%AE%E4%B8%8E%E6%B5%8B%E8%AF%95%E7%A8%8B%E5%BA%8F/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"Author: 风的彷徨","link":"Link: ","source":"Source: 风的彷徨的博客","info":"Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source."}},
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Map 与 unordered_map 横向与纵向测试，附带原始数据与测试程序',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-03-25 00:05:26'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://q1.qlogo.cn/g?b=qq&amp;nk=1391525377&amp;s=100" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">25</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">34</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/cover/r2.webp')"><nav id="nav"><span id="blog-info"><a href="/" title="风的彷徨的博客"><span class="site-name">风的彷徨的博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Map 与 unordered_map 横向与纵向测试，附带原始数据与测试程序</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-03-24T16:04:46.000Z" title="Created 2024-03-25 00:04:46">2024-03-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2024-03-24T16:05:26.034Z" title="Updated 2024-03-25 00:05:26">2024-03-25</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Map 与 unordered_map 横向与纵向测试，附带原始数据与测试程序"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><blockquote>
+<p>写程序时，面临用Map还是unordered_map，总是很纠结，于是写了个程序进行测试</p>
+</blockquote>
+<h1 id="Map-与-unordered-map-横向与纵向测试，附带原始数据与测试程序"><a href="#Map-与-unordered-map-横向与纵向测试，附带原始数据与测试程序" class="headerlink" title="Map 与 unordered_map 横向与纵向测试，附带原始数据与测试程序"></a>Map 与 unordered_map 横向与纵向测试，附带原始数据与测试程序</h1><h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><table>
+<thead>
+<tr>
+<th>配件</th>
+<th>信息</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CPU</td>
+<td>Intel® Pentium(R) CPU G3260 @ 3.30GHz × 2</td>
+</tr>
+<tr>
+<td>内存</td>
+<td>7.6 GiB</td>
+</tr>
+<tr>
+<td>系统</td>
+<td>Ubuntu 20.04.1 LTS</td>
+</tr>
+<tr>
+<td>编译器</td>
+<td>g++-9</td>
+</tr>
+<tr>
+<td>编译选项</td>
+<td>-O2</td>
+</tr>
+</tbody></table>
+<h2 id="简单数据-4-Byte"><a href="#简单数据-4-Byte" class="headerlink" title="简单数据(4 Byte)"></a>简单数据(4 Byte)</h2><p>首先先上一组小数据</p>
+<table>
+<thead>
+<tr>
+<th>测试项目</th>
+<th>数据范围</th>
+<th>耗时(us)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Map写入</td>
+<td>1000</td>
+<td>94</td>
+</tr>
+<tr>
+<td>——Map读取</td>
+<td>1000</td>
+<td>62</td>
+</tr>
+<tr>
+<td>unordered_map写入</td>
+<td>1000</td>
+<td>101</td>
+</tr>
+<tr>
+<td>——unordered_map读取</td>
+<td>1000</td>
+<td>61</td>
+</tr>
+</tbody></table>
+<p><strong>可以看到数据较小时候是Map占优势</strong></p>
+<p>再来一组中等数据</p>
+<table>
+<thead>
+<tr>
+<th>测试项目</th>
+<th>数据范围</th>
+<th>耗时(us)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Map写入</td>
+<td>10000</td>
+<td>1682</td>
+</tr>
+<tr>
+<td>——Map读取</td>
+<td>10000</td>
+<td>2703</td>
+</tr>
+<tr>
+<td>unordered_map写入</td>
+<td>10000</td>
+<td>1160</td>
+</tr>
+<tr>
+<td>——unordered_map读取</td>
+<td>10000</td>
+<td>677</td>
+</tr>
+</tbody></table>
+<p><strong>大于1000后就是unordered_map优势更大</strong></p>
+<p>特大数据下情况是</p>
+<table>
+<thead>
+<tr>
+<th>测试项目</th>
+<th>数据范围</th>
+<th>耗时(us)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Map写入</td>
+<td>1000000</td>
+<td>855782</td>
+</tr>
+<tr>
+<td>——Map读取</td>
+<td>1000000</td>
+<td>811670</td>
+</tr>
+<tr>
+<td>unordered_map写入</td>
+<td>1000000</td>
+<td>267515</td>
+</tr>
+<tr>
+<td>——unordered_map读取</td>
+<td>1000000</td>
+<td>118495</td>
+</tr>
+</tbody></table>
+<p><strong>大数据便是unordered_map</strong>完全碾压</p>
+<h2 id="复杂数据-32-Byte"><a href="#复杂数据-32-Byte" class="headerlink" title="复杂数据(32 Byte)"></a>复杂数据(32 Byte)</h2><p>有人可能会说当数据很复杂时unordered_map容易引发冲突</p>
+<table>
+<thead>
+<tr>
+<th>测试项目</th>
+<th>数据范围</th>
+<th>耗时(us)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Map写入</td>
+<td>10000</td>
+<td>4064</td>
+</tr>
+<tr>
+<td>——Map读取</td>
+<td>10000</td>
+<td>4569</td>
+</tr>
+<tr>
+<td>unordered_map写入</td>
+<td>10000</td>
+<td>2139</td>
+</tr>
+<tr>
+<td>——unordered_map读取</td>
+<td>10000</td>
+<td>1716</td>
+</tr>
+</tbody></table>
+<p>和上面比较，发现数据变得更复杂时，Map更不如unordered_map了 </p>
+<h2 id="重载和函数的速度"><a href="#重载和函数的速度" class="headerlink" title="重载和函数的速度"></a>重载和函数的速度</h2><p>另外测试还发现，无论是写入还是读取，用重载方法都要比函数慢，其中读取慢的更多。</p>
+<table>
+<thead>
+<tr>
+<th>测试项目</th>
+<th>数据范围</th>
+<th>耗时(us)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Map重载写入</td>
+<td>1000000</td>
+<td>906477</td>
+</tr>
+<tr>
+<td>——Map重载读取</td>
+<td>1000000</td>
+<td>1115637</td>
+</tr>
+<tr>
+<td>Map函数写入</td>
+<td>1000000</td>
+<td>855782</td>
+</tr>
+<tr>
+<td>——Map函数读取</td>
+<td>1000000</td>
+<td>811670</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>测试项目</th>
+<th>数据范围</th>
+<th>耗时(us)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>unordered_map重载写入</td>
+<td>1000000</td>
+<td>284470</td>
+</tr>
+<tr>
+<td>——unordered_map重载读取</td>
+<td>1000000</td>
+<td>276208</td>
+</tr>
+<tr>
+<td>unordered_map函数写入</td>
+<td>1000000</td>
+<td>267515</td>
+</tr>
+<tr>
+<td>——unordered_map函数读取</td>
+<td>1000000</td>
+<td>118495</td>
+</tr>
+</tbody></table>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>根据上面的数据可以分析出</p>
+<p>在数据小于1000时，可以采取Map。大于1000，小于10000时，如果需要排序，选用Map，不需要就unordered_map。大于10000的时候没有特殊要求，采用Map。</p>
+<p>另外，插入和读取如果有<strong>时间</strong>刚需，<strong>应该采用函数，而不是重载</strong>。</p>
+<h1 id="原始数据与测试程序"><a href="#原始数据与测试程序" class="headerlink" title="原始数据与测试程序"></a>原始数据与测试程序</h1><p>如果有人需要原始数据，可以看看。</p>
+<h2 id="int-4"><a href="#int-4" class="headerlink" title="int 4"></a>int 4</h2><h3 id="map"><a href="#map" class="headerlink" title="map"></a>map</h3><h4 id="operator"><a href="#operator" class="headerlink" title="operator"></a>operator</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ctime&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;map&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> start = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">10000</span>; i++)</span><br><span class="line">        <span class="built_in">rand</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> n = <span class="number">1</span>; n &lt;= <span class="number">1e6</span>; n *= <span class="number">10</span>)</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> m = <span class="number">1</span>; m &lt;= <span class="number">1e6</span>; m *= <span class="number">10</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            map&lt;<span class="type">int</span>, <span class="type">int</span>&gt; M;</span><br><span class="line">            <span class="built_in">srand</span>(<span class="number">233</span>);</span><br><span class="line">            start = <span class="built_in">clock</span>();</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">                M[<span class="built_in">rand</span>()] = <span class="built_in">rand</span>();</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;|Writing spends |&quot;</span> &lt;&lt; <span class="built_in">clock</span>() - start &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; n &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; m &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; endl;</span><br><span class="line">            start = <span class="built_in">clock</span>();</span><br><span class="line">            <span class="type">int</span> temp;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= m; i++)</span><br><span class="line">                M[<span class="built_in">rand</span>()];</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;|Reading spends |&quot;</span> &lt;&lt; <span class="built_in">clock</span>() - start &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; n &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; m &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; endl;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>耗时(微秒)</th>
+<th>写入次数</th>
+<th>读取次数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Writing spends</td>
+<td>26</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>3</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>1</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2</td>
+<td>1</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>0</td>
+<td>1</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>15</td>
+<td>1</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>1</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>134</td>
+<td>1</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2</td>
+<td>1</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1781</td>
+<td>1</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>4</td>
+<td>1</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>48145</td>
+<td>1</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>7</td>
+<td>1</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>823069</td>
+<td>1</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>7</td>
+<td>10</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>10</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>10</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>13</td>
+<td>10</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>10</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>217</td>
+<td>10</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2</td>
+<td>10</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2971</td>
+<td>10</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>5</td>
+<td>10</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>119565</td>
+<td>10</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>9</td>
+<td>10</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>947049</td>
+<td>10</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>18</td>
+<td>100</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>100</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>10</td>
+<td>100</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2</td>
+<td>100</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>9</td>
+<td>100</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>17</td>
+<td>100</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>8</td>
+<td>100</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>231</td>
+<td>100</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>11</td>
+<td>100</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>3457</td>
+<td>100</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>14</td>
+<td>100</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>86540</td>
+<td>100</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>24</td>
+<td>100</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1350311</td>
+<td>100</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>166</td>
+<td>1000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2</td>
+<td>1000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>147</td>
+<td>1000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>3</td>
+<td>1000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>133</td>
+<td>1000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>24</td>
+<td>1000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>132</td>
+<td>1000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>245</td>
+<td>1000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>143</td>
+<td>1000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>3755</td>
+<td>1000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>200</td>
+<td>1000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>115802</td>
+<td>1000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>219</td>
+<td>1000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>950769</td>
+<td>1000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2963</td>
+<td>10000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>10000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2988</td>
+<td>10000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>6</td>
+<td>10000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2905</td>
+<td>10000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>43</td>
+<td>10000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>4573</td>
+<td>10000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1448</td>
+<td>10000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>3492</td>
+<td>10000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>12881</td>
+<td>10000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2880</td>
+<td>10000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>101483</td>
+<td>10000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2951</td>
+<td>10000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>935608</td>
+<td>10000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>49535</td>
+<td>100000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2</td>
+<td>100000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>70612</td>
+<td>100000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>8</td>
+<td>100000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>76232</td>
+<td>100000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>76</td>
+<td>100000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>80457</td>
+<td>100000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>790</td>
+<td>100000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>84432</td>
+<td>100000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>9677</td>
+<td>100000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>78376</td>
+<td>100000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>97320</td>
+<td>100000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>69574</td>
+<td>100000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>965508</td>
+<td>100000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>903613</td>
+<td>1000000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>3</td>
+<td>1000000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>907309</td>
+<td>1000000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>12</td>
+<td>1000000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>916617</td>
+<td>1000000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>119</td>
+<td>1000000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>917360</td>
+<td>1000000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1177</td>
+<td>1000000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>904860</td>
+<td>1000000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>12960</td>
+<td>1000000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>905297</td>
+<td>1000000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>127472</td>
+<td>1000000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>906477</td>
+<td>1000000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1115637</td>
+<td>1000000</td>
+<td>1000000</td>
+</tr>
+</tbody></table>
+<h4 id="insert-find"><a href="#insert-find" class="headerlink" title="insert &amp; find"></a>insert &amp; find</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ctime&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;map&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> start = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">10000</span>; i++)</span><br><span class="line">        <span class="built_in">rand</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> n = <span class="number">1</span>; n &lt;= <span class="number">1e6</span>; n *= <span class="number">10</span>)</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> m = <span class="number">1</span>; m &lt;= <span class="number">1e6</span>; m *= <span class="number">10</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            map&lt;<span class="type">int</span>, <span class="type">int</span>&gt; M;</span><br><span class="line">            <span class="built_in">srand</span>(<span class="number">233</span>);</span><br><span class="line">            start = <span class="built_in">clock</span>();</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">                M.<span class="built_in">insert</span>(<span class="built_in">make_pair</span>(<span class="built_in">rand</span>(), <span class="built_in">rand</span>()));</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;|Writing spends |&quot;</span> &lt;&lt; <span class="built_in">clock</span>() - start &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; n &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; m &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; endl;</span><br><span class="line">            start = <span class="built_in">clock</span>();</span><br><span class="line">            <span class="type">int</span> temp;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= m; i++)</span><br><span class="line">                M.<span class="built_in">find</span>(<span class="built_in">rand</span>());</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;|Reading spends |&quot;</span> &lt;&lt; <span class="built_in">clock</span>() - start &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; n &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; m &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; endl;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>耗时(微秒)</th>
+<th>写入次数</th>
+<th>读取次数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Writing spends</td>
+<td>26</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>1</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>1</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>0</td>
+<td>1</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2</td>
+<td>1</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>0</td>
+<td>1</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>12</td>
+<td>1</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>1</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>109</td>
+<td>1</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>1</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1086</td>
+<td>1</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>1</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>10757</td>
+<td>1</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>3</td>
+<td>10</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>10</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>10</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>3</td>
+<td>10</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>10</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>19</td>
+<td>10</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>10</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>187</td>
+<td>10</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>10</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1813</td>
+<td>10</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2</td>
+<td>10</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>18350</td>
+<td>10</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>19</td>
+<td>100</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>4</td>
+<td>100</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>12</td>
+<td>100</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>100</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>7</td>
+<td>100</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>5</td>
+<td>100</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>7</td>
+<td>100</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>37</td>
+<td>100</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>7</td>
+<td>100</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>367</td>
+<td>100</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>11</td>
+<td>100</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>3599</td>
+<td>100</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>11</td>
+<td>100</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>35590</td>
+<td>100</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>259</td>
+<td>1000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2</td>
+<td>1000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>107</td>
+<td>1000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2</td>
+<td>1000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>99</td>
+<td>1000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>9</td>
+<td>1000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>94</td>
+<td>1000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>62</td>
+<td>1000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>95</td>
+<td>1000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>565</td>
+<td>1000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>99</td>
+<td>1000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>5584</td>
+<td>1000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>101</td>
+<td>1000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>55971</td>
+<td>1000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1732</td>
+<td>10000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>10000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2230</td>
+<td>10000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>4</td>
+<td>10000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2644</td>
+<td>10000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>28</td>
+<td>10000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1633</td>
+<td>10000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>188</td>
+<td>10000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1682</td>
+<td>10000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2703</td>
+<td>10000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1638</td>
+<td>10000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>14327</td>
+<td>10000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1546</td>
+<td>10000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>142330</td>
+<td>10000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>67350</td>
+<td>100000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2</td>
+<td>100000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>69654</td>
+<td>100000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>4</td>
+<td>100000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>64137</td>
+<td>100000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>39</td>
+<td>100000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>67940</td>
+<td>100000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>436</td>
+<td>100000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>63069</td>
+<td>100000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>4709</td>
+<td>100000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>86477</td>
+<td>100000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>64116</td>
+<td>100000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>67929</td>
+<td>100000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>370789</td>
+<td>100000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>768626</td>
+<td>1000000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2</td>
+<td>1000000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>850479</td>
+<td>1000000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>12</td>
+<td>1000000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>857980</td>
+<td>1000000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>84</td>
+<td>1000000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>854080</td>
+<td>1000000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>899</td>
+<td>1000000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>856615</td>
+<td>1000000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>9960</td>
+<td>1000000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>871467</td>
+<td>1000000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>111029</td>
+<td>1000000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>855782</td>
+<td>1000000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>811670</td>
+<td>1000000</td>
+<td>1000000</td>
+</tr>
+</tbody></table>
+<h3 id="unordered-map"><a href="#unordered-map" class="headerlink" title="unordered_map"></a>unordered_map</h3><h4 id="operator-1"><a href="#operator-1" class="headerlink" title="operator"></a>operator</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ctime&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;tr1/unordered_map&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> tr1;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> start = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">10000</span>; i++)</span><br><span class="line">        <span class="built_in">rand</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> n = <span class="number">1</span>; n &lt;= <span class="number">1e6</span>; n *= <span class="number">10</span>)</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> m = <span class="number">1</span>; m &lt;= <span class="number">1e6</span>; m *= <span class="number">10</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            unordered_map&lt;<span class="type">int</span>, <span class="type">int</span>&gt; M;</span><br><span class="line">            <span class="built_in">srand</span>(<span class="number">233</span>);</span><br><span class="line">            start = <span class="built_in">clock</span>();</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">                M[<span class="built_in">rand</span>()] = <span class="built_in">rand</span>();</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;|Writing spends |&quot;</span> &lt;&lt; <span class="built_in">clock</span>() - start &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; n &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; m &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; endl;</span><br><span class="line">            start = <span class="built_in">clock</span>();</span><br><span class="line">            <span class="type">int</span> temp;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= m; i++)</span><br><span class="line">                M[<span class="built_in">rand</span>()];</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;|Reading spends |&quot;</span> &lt;&lt; <span class="built_in">clock</span>() - start &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; n &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; m &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; endl;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>耗时(微秒)</th>
+<th>写入次数</th>
+<th>读取次数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Writing spends</td>
+<td>22</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>3</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>1</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2</td>
+<td>1</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>1</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>15</td>
+<td>1</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2</td>
+<td>1</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>98</td>
+<td>1</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2</td>
+<td>1</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>973</td>
+<td>1</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2</td>
+<td>1</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>18905</td>
+<td>1</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>7</td>
+<td>1</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>304928</td>
+<td>1</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>6</td>
+<td>10</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>0</td>
+<td>10</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>10</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>211558</td>
+<td>10</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2</td>
+<td>10</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>83</td>
+<td>10</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>10</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>816</td>
+<td>10</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2</td>
+<td>10</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>18775</td>
+<td>10</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>9</td>
+<td>10</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>331476</td>
+<td>10</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>18</td>
+<td>100</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>100</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>10</td>
+<td>100</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2</td>
+<td>100</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>9</td>
+<td>100</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>10</td>
+<td>100</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>10</td>
+<td>100</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>84</td>
+<td>100</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>21</td>
+<td>100</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>856</td>
+<td>100</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>16</td>
+<td>100</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>19406</td>
+<td>100</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>20</td>
+<td>100</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>344753</td>
+<td>100</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>93</td>
+<td>1000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>1000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>98</td>
+<td>1000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>1000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>95</td>
+<td>1000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>5</td>
+<td>1000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>94</td>
+<td>1000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>81</td>
+<td>1000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>106</td>
+<td>1000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>749</td>
+<td>1000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>97</td>
+<td>1000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>20981</td>
+<td>1000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>110</td>
+<td>1000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>330149</td>
+<td>1000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>858</td>
+<td>10000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>10000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>858</td>
+<td>10000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>10000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>837</td>
+<td>10000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>7</td>
+<td>10000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>841</td>
+<td>10000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>59</td>
+<td>10000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>850</td>
+<td>10000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>950</td>
+<td>10000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>849</td>
+<td>10000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>27480</td>
+<td>10000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>919</td>
+<td>10000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>338245</td>
+<td>10000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>33755</td>
+<td>100000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>100000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>29546</td>
+<td>100000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>3</td>
+<td>100000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>31192</td>
+<td>100000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>97</td>
+<td>100000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>30126</td>
+<td>100000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>216</td>
+<td>100000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>37193</td>
+<td>100000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1996</td>
+<td>100000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>32065</td>
+<td>100000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>39717</td>
+<td>100000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>17520</td>
+<td>100000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>473755</td>
+<td>100000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>480733</td>
+<td>1000000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2</td>
+<td>1000000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>345884</td>
+<td>1000000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>44</td>
+<td>1000000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>284269</td>
+<td>1000000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>24</td>
+<td>1000000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>283844</td>
+<td>1000000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>223</td>
+<td>1000000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>278945</td>
+<td>1000000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2068</td>
+<td>1000000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>280158</td>
+<td>1000000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>189937</td>
+<td>1000000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>284470</td>
+<td>1000000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>376208</td>
+<td>1000000</td>
+<td>1000000</td>
+</tr>
+</tbody></table>
+<h4 id="insert-find-1"><a href="#insert-find-1" class="headerlink" title="insert &amp; find"></a>insert &amp; find</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ctime&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;tr1/unordered_map&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> tr1;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> start = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">10000</span>; i++)</span><br><span class="line">        <span class="built_in">rand</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> n = <span class="number">1</span>; n &lt;= <span class="number">1e6</span>; n *= <span class="number">10</span>)</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> m = <span class="number">1</span>; m &lt;= <span class="number">1e6</span>; m *= <span class="number">10</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            unordered_map&lt;<span class="type">int</span>, <span class="type">int</span>&gt; M;</span><br><span class="line">            <span class="built_in">srand</span>(<span class="number">233</span>);</span><br><span class="line">            start = <span class="built_in">clock</span>();</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">                M.<span class="built_in">insert</span>(<span class="built_in">make_pair</span>(<span class="built_in">rand</span>(), <span class="built_in">rand</span>()));</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;|Writing spends |&quot;</span> &lt;&lt; <span class="built_in">clock</span>() - start &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; n &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; m &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; endl;</span><br><span class="line">            start = <span class="built_in">clock</span>();</span><br><span class="line">            <span class="type">int</span> temp;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= m; i++)</span><br><span class="line">                M.<span class="built_in">find</span>(<span class="built_in">rand</span>());</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;|Reading spends |&quot;</span> &lt;&lt; <span class="built_in">clock</span>() - start &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; n &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; m &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; endl;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>耗时(微秒)</th>
+<th>写入次数</th>
+<th>读取次数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Writing spends</td>
+<td>24</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>1</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>1</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>1</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2</td>
+<td>1</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>1</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>18</td>
+<td>1</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>1</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>174</td>
+<td>1</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>1</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1720</td>
+<td>1</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>1</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>17160</td>
+<td>1</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2</td>
+<td>10</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>10</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>10</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>4</td>
+<td>10</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>10</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>25</td>
+<td>10</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>10</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>238</td>
+<td>10</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>10</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2361</td>
+<td>10</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>10</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>23766</td>
+<td>10</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>18</td>
+<td>100</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>6</td>
+<td>100</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>12</td>
+<td>100</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>4</td>
+<td>100</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>13</td>
+<td>100</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>13</td>
+<td>100</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>17</td>
+<td>100</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>45</td>
+<td>100</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>14</td>
+<td>100</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>251</td>
+<td>100</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>12</td>
+<td>100</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2390</td>
+<td>100</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>12</td>
+<td>100</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>24286</td>
+<td>100</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>126</td>
+<td>1000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>1000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>98</td>
+<td>1000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>1000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>93</td>
+<td>1000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>3</td>
+<td>1000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>101</td>
+<td>1000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>61</td>
+<td>1000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>104</td>
+<td>1000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>259</td>
+<td>1000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>97</td>
+<td>1000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2492</td>
+<td>1000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>96</td>
+<td>1000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>25507</td>
+<td>1000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1587</td>
+<td>10000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>10000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1013</td>
+<td>10000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>10000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>823</td>
+<td>10000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>8</td>
+<td>10000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>840</td>
+<td>10000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>54</td>
+<td>10000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1160</td>
+<td>10000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>677</td>
+<td>10000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>813</td>
+<td>10000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>4968</td>
+<td>10000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>808</td>
+<td>10000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>38649</td>
+<td>10000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>28790</td>
+<td>100000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>11</td>
+<td>100000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>45300</td>
+<td>100000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>5</td>
+<td>100000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>34463</td>
+<td>100000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>14</td>
+<td>100000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>35388</td>
+<td>100000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>113</td>
+<td>100000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>32767</td>
+<td>100000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2677</td>
+<td>100000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>31524</td>
+<td>100000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>13741</td>
+<td>100000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>33473</td>
+<td>100000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>100586</td>
+<td>100000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>300962</td>
+<td>1000000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>1000000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>442759</td>
+<td>1000000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2</td>
+<td>1000000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>270830</td>
+<td>1000000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>10</td>
+<td>1000000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>270029</td>
+<td>1000000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>124</td>
+<td>1000000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>268652</td>
+<td>1000000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1192</td>
+<td>1000000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>269445</td>
+<td>1000000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>12717</td>
+<td>1000000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>267515</td>
+<td>1000000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>118495</td>
+<td>1000000</td>
+<td>1000000</td>
+</tr>
+</tbody></table>
+<h2 id="Btye-32"><a href="#Btye-32" class="headerlink" title="Btye 32"></a>Btye 32</h2><h4 id="map-1"><a href="#map-1" class="headerlink" title="map"></a>map</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ctime&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;map&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">__uint128_t</span> <span class="title">rand128</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">rand</span>() | ((<span class="type">__uint128_t</span>)<span class="built_in">rand</span>() &lt;&lt; <span class="number">32</span>) | ((<span class="type">__uint128_t</span>)<span class="built_in">rand</span>() &lt;&lt; <span class="number">64</span>) | ((<span class="type">__uint128_t</span>)<span class="built_in">rand</span>() &lt;&lt; <span class="number">96</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> start = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">10000</span>; i++)</span><br><span class="line">        <span class="built_in">rand</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> n = <span class="number">1</span>; n &lt;= <span class="number">1e6</span>; n *= <span class="number">10</span>)</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> m = <span class="number">1</span>; m &lt;= <span class="number">1e6</span>; m *= <span class="number">10</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            map&lt;pair&lt;<span class="type">__uint128_t</span>, <span class="type">__uint128_t</span>&gt;, <span class="type">int</span>&gt; M;</span><br><span class="line">            <span class="built_in">srand</span>(<span class="number">233</span>);</span><br><span class="line">            start = <span class="built_in">clock</span>();</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">                M.<span class="built_in">insert</span>(<span class="built_in">make_pair</span>(<span class="built_in">make_pair</span>(<span class="built_in">rand128</span>(), <span class="built_in">rand128</span>()), <span class="built_in">rand</span>()));</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;|Writing spends |&quot;</span> &lt;&lt; <span class="built_in">clock</span>() - start &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; n &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; m &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; endl;</span><br><span class="line">            start = <span class="built_in">clock</span>();</span><br><span class="line">            <span class="type">int</span> temp;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= m; i++)</span><br><span class="line">                M.<span class="built_in">find</span>(<span class="built_in">make_pair</span>(<span class="built_in">rand128</span>(), <span class="built_in">rand128</span>()));</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;|Reading spends |&quot;</span> &lt;&lt; <span class="built_in">clock</span>() - start &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; n &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; m &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; endl;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>耗时(微秒)</th>
+<th>写入次数</th>
+<th>读取次数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Writing spends</td>
+<td>24</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>1</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2</td>
+<td>1</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>1</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>9</td>
+<td>1</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>1</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>70</td>
+<td>1</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>1</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>693</td>
+<td>1</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>1</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>7061</td>
+<td>1</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2</td>
+<td>1</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>70166</td>
+<td>1</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>4</td>
+<td>10</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>10</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>3</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>10</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>9</td>
+<td>10</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>10</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>83</td>
+<td>10</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2</td>
+<td>10</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>802</td>
+<td>10</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2</td>
+<td>10</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>7936</td>
+<td>10</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>3</td>
+<td>10</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>81096</td>
+<td>10</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>26</td>
+<td>100</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2</td>
+<td>100</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>18</td>
+<td>100</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>3</td>
+<td>100</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>18</td>
+<td>100</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>13</td>
+<td>100</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>18</td>
+<td>100</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>103</td>
+<td>100</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>17</td>
+<td>100</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>996</td>
+<td>100</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>20</td>
+<td>100</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>9949</td>
+<td>100</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>19</td>
+<td>100</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>100397</td>
+<td>100</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>226</td>
+<td>1000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>1000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>166</td>
+<td>1000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>3</td>
+<td>1000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>164</td>
+<td>1000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>15</td>
+<td>1000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>164</td>
+<td>1000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>133</td>
+<td>1000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>167</td>
+<td>1000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1278</td>
+<td>1000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>168</td>
+<td>1000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>12895</td>
+<td>1000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>174</td>
+<td>1000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>127273</td>
+<td>1000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2917</td>
+<td>10000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2</td>
+<td>10000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2730</td>
+<td>10000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>4</td>
+<td>10000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>3344</td>
+<td>10000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>36</td>
+<td>10000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>5555</td>
+<td>10000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>670</td>
+<td>10000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>4300</td>
+<td>10000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>4064</td>
+<td>10000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>4569</td>
+<td>10000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>35972</td>
+<td>10000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>3696</td>
+<td>10000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>235334</td>
+<td>10000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>80213</td>
+<td>100000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>100000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>75975</td>
+<td>100000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>7</td>
+<td>100000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>72787</td>
+<td>100000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>61</td>
+<td>100000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>72727</td>
+<td>100000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>620</td>
+<td>100000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>78175</td>
+<td>100000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>6618</td>
+<td>100000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>85278</td>
+<td>100000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>74804</td>
+<td>100000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>69928</td>
+<td>100000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>541858</td>
+<td>100000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>937039</td>
+<td>1000000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2</td>
+<td>1000000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>996383</td>
+<td>1000000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>12</td>
+<td>1000000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>997665</td>
+<td>1000000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>116</td>
+<td>1000000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1001405</td>
+<td>1000000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1115</td>
+<td>1000000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>994444</td>
+<td>1000000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>11241</td>
+<td>1000000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1009323</td>
+<td>1000000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>126125</td>
+<td>1000000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>998410</td>
+<td>1000000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1002439</td>
+<td>1000000</td>
+<td>1000000</td>
+</tr>
+</tbody></table>
+<h4 id="unordered-map-1"><a href="#unordered-map-1" class="headerlink" title="unordered_map"></a>unordered_map</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ctime&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;functional&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;tr1/unordered_map&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> tr1;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">hashfunc</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">inline</span> <span class="type">size_t</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="type">const</span> pair&lt;<span class="type">__uint128_t</span>, <span class="type">__uint128_t</span>&gt; &amp;i)</span> <span class="type">const</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> tr1::<span class="built_in">hash</span>&lt;<span class="type">long</span> <span class="type">long</span>&gt;()((<span class="type">long</span> <span class="type">long</span>)i.first) ^ tr1::<span class="built_in">hash</span>&lt;<span class="type">long</span> <span class="type">long</span>&gt;()((<span class="type">long</span> <span class="type">long</span>)(i.first &gt;&gt; <span class="number">64</span>)) ^ tr1::<span class="built_in">hash</span>&lt;<span class="type">long</span> <span class="type">long</span>&gt;()((<span class="type">long</span> <span class="type">long</span>)i.second) ^ tr1::<span class="built_in">hash</span>&lt;<span class="type">long</span> <span class="type">long</span>&gt;()((<span class="type">long</span> <span class="type">long</span>)(i.second &gt;&gt; <span class="number">64</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">__uint128_t</span> <span class="title">rand128</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">rand</span>() | ((<span class="type">__uint128_t</span>)<span class="built_in">rand</span>() &lt;&lt; <span class="number">32</span>) | ((<span class="type">__uint128_t</span>)<span class="built_in">rand</span>() &lt;&lt; <span class="number">64</span>) | ((<span class="type">__uint128_t</span>)<span class="built_in">rand</span>() &lt;&lt; <span class="number">96</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> start = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">10000</span>; i++)</span><br><span class="line">        <span class="built_in">rand</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> n = <span class="number">1</span>; n &lt;= <span class="number">1e6</span>; n *= <span class="number">10</span>)</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> m = <span class="number">1</span>; m &lt;= <span class="number">1e6</span>; m *= <span class="number">10</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            unordered_map&lt;pair&lt;<span class="type">__uint128_t</span>, <span class="type">__uint128_t</span>&gt;, <span class="type">int</span>, hashfunc&gt; M;</span><br><span class="line">            <span class="built_in">srand</span>(<span class="number">233</span>);</span><br><span class="line">            start = <span class="built_in">clock</span>();</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">                M.<span class="built_in">insert</span>(<span class="built_in">make_pair</span>(<span class="built_in">make_pair</span>(<span class="built_in">rand128</span>(), <span class="built_in">rand128</span>()), <span class="built_in">rand</span>()));</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;|Writing spends |&quot;</span> &lt;&lt; <span class="built_in">clock</span>() - start &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; n &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; m &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; endl;</span><br><span class="line">            start = <span class="built_in">clock</span>();</span><br><span class="line">            <span class="type">int</span> temp;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= m; i++)</span><br><span class="line">                M.<span class="built_in">find</span>(<span class="built_in">make_pair</span>(<span class="built_in">rand128</span>(), <span class="built_in">rand128</span>()));</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;|Reading spends |&quot;</span> &lt;&lt; <span class="built_in">clock</span>() - start &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; n &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; m &lt;&lt; <span class="string">&#x27;|&#x27;</span> &lt;&lt; endl;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>耗时(微秒)</th>
+<th>写入次数</th>
+<th>读取次数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Writing spends</td>
+<td>21</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>1</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>1</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>1</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>9</td>
+<td>1</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>1</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>76</td>
+<td>1</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>1</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>744</td>
+<td>1</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>1</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>7466</td>
+<td>1</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2</td>
+<td>1</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>74453</td>
+<td>1</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>3</td>
+<td>10</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>0</td>
+<td>10</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2</td>
+<td>10</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>9</td>
+<td>10</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2</td>
+<td>10</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>85</td>
+<td>10</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2</td>
+<td>10</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>836</td>
+<td>10</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1</td>
+<td>10</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>8370</td>
+<td>10</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2</td>
+<td>10</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>84176</td>
+<td>10</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>27</td>
+<td>100</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>100</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>17</td>
+<td>100</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2</td>
+<td>100</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>15</td>
+<td>100</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>9</td>
+<td>100</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>14</td>
+<td>100</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>83</td>
+<td>100</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>14</td>
+<td>100</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>825</td>
+<td>100</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>15</td>
+<td>100</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>8127</td>
+<td>100</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>20</td>
+<td>100</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>81937</td>
+<td>100</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>211</td>
+<td>1000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>1000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>164</td>
+<td>1000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2</td>
+<td>1000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>143</td>
+<td>1000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>9</td>
+<td>1000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>160</td>
+<td>1000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>84</td>
+<td>1000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>144</td>
+<td>1000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>839</td>
+<td>1000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>161</td>
+<td>1000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>8344</td>
+<td>1000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>161</td>
+<td>1000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>84518</td>
+<td>1000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2609</td>
+<td>10000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>10000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2341</td>
+<td>10000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>8</td>
+<td>10000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1959</td>
+<td>10000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>18</td>
+<td>10000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1548</td>
+<td>10000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>193</td>
+<td>10000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>2139</td>
+<td>10000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1716</td>
+<td>10000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1929</td>
+<td>10000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>14391</td>
+<td>10000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>1573</td>
+<td>10000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>128671</td>
+<td>10000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>37911</td>
+<td>100000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1</td>
+<td>100000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>64046</td>
+<td>100000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>3</td>
+<td>100000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>29753</td>
+<td>100000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>18</td>
+<td>100000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>24535</td>
+<td>100000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>211</td>
+<td>100000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>34458</td>
+<td>100000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>1982</td>
+<td>100000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>41840</td>
+<td>100000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>30702</td>
+<td>100000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>44858</td>
+<td>100000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>195389</td>
+<td>100000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>426814</td>
+<td>1000000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2</td>
+<td>1000000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>637874</td>
+<td>1000000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>3</td>
+<td>1000000</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>405023</td>
+<td>1000000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>28</td>
+<td>1000000</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>388910</td>
+<td>1000000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>301</td>
+<td>1000000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>402672</td>
+<td>1000000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>2515</td>
+<td>1000000</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>393968</td>
+<td>1000000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>29590</td>
+<td>1000000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>Writing spends</td>
+<td>395403</td>
+<td>1000000</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Reading spends</td>
+<td>250795</td>
+<td>1000000</td>
+<td>1000000</td>
+</tr>
+</tbody></table>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://www.pchar.cn">风的彷徨</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://www.pchar.cn/2024/03/25/Map-%E4%B8%8E-unordered-map-%E6%A8%AA%E5%90%91%E4%B8%8E%E7%BA%B5%E5%90%91%E6%B5%8B%E8%AF%95%EF%BC%8C%E9%99%84%E5%B8%A6%E5%8E%9F%E5%A7%8B%E6%95%B0%E6%8D%AE%E4%B8%8E%E6%B5%8B%E8%AF%95%E7%A8%8B%E5%BA%8F/">https://www.pchar.cn/2024/03/25/Map-%E4%B8%8E-unordered-map-%E6%A8%AA%E5%90%91%E4%B8%8E%E7%BA%B5%E5%90%91%E6%B5%8B%E8%AF%95%EF%BC%8C%E9%99%84%E5%B8%A6%E5%8E%9F%E5%A7%8B%E6%95%B0%E6%8D%AE%E4%B8%8E%E6%B5%8B%E8%AF%95%E7%A8%8B%E5%BA%8F/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/C/">C++</a><a class="post-meta__tags" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a><a class="post-meta__tags" href="/tags/%E7%AE%97%E6%B3%95%E6%B5%8B%E8%AF%95/">算法测试</a><a class="post-meta__tags" href="/tags/STL/">STL</a></div><div class="post_share"><div class="social-share" data-image="/cover/r2.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/03/25/%E5%9B%BD%E4%BA%A7Linux%E5%8F%91%E8%A1%8C%E7%89%88-Deepin-%E8%AF%84%E4%BB%B7%E4%B8%8E%E4%B8%BB%E8%A7%82%E5%B1%95%E6%9C%9B-%E6%88%91%E4%B8%8EDeepin%E7%9A%84%E6%95%85%E4%BA%8B/" title="国产Linux发行版 Deepin 评价与主观展望 我与Deepin的故事"><img class="cover" src="/cover/r5.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">国产Linux发行版 Deepin 评价与主观展望 我与Deepin的故事</div></div></a></div><div class="next-post pull-right"><a href="/2024/03/25/%E7%AE%80%E6%B4%81%EF%BC%8C%E5%BF%AB%E9%80%9F%E7%9A%84bv%E5%8F%B7%E8%BD%ACav%E5%8F%B7-c-%E5%AE%9E%E7%8E%B0/" title="简洁，快速的bv号转av号 c++实现"><img class="cover" src="/cover/r2.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next</div><div class="next_info">简洁，快速的bv号转av号 c++实现</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2024/03/24/%E4%B8%89%E7%A7%8D%E7%BD%91%E7%BB%9C%E6%B5%81%EF%BC%88%E6%9C%80%E5%A4%A7%E6%B5%81%EF%BC%89%E7%9A%84%E5%AE%9E%E7%8E%B0%E7%AE%97%E6%B3%95%E8%AE%B2%E8%A7%A3%E4%B8%8E%E4%BB%A3%E7%A0%81/" title="三种网络流（最大流）的实现算法讲解与代码"><img class="cover" src="/cover/1.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-03-24</div><div class="title">三种网络流（最大流）的实现算法讲解与代码</div></div></a></div><div><a href="/2024/03/25/ORB-BEBLID-%E5%88%A9%E7%94%A8OpenCV-C-%E5%AE%9E%E7%8E%B0%E5%B0%BA%E5%BA%A6%E4%B8%8D%E5%8F%98%E6%80%A7%E4%B8%8E%E8%A7%92%E5%BA%A6%E4%B8%8D%E5%8F%98%E6%80%A7%E7%9A%84%E7%89%B9%E5%BE%81%E6%89%BE%E5%9B%BE%E7%AE%97%E6%B3%95/" title="ORB&#x2F;BEBLID 利用OpenCV(C++)实现尺度不变性与角度不变性的特征找图算法"><img class="cover" src="/cover/r1.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-03-25</div><div class="title">ORB&#x2F;BEBLID 利用OpenCV(C++)实现尺度不变性与角度不变性的特征找图算法</div></div></a></div><div><a href="/2024/03/25/winrt%E6%96%B0dx%E6%88%AA%E5%9B%BE%E6%9C%80%E5%B0%8F%E5%AE%9E%E7%8E%B0/" title="winrt新dx截图最小实现"><img class="cover" src="/cover/r7.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-03-25</div><div class="title">winrt新dx截图最小实现</div></div></a></div><div><a href="/2024/03/25/%E6%B5%85%E8%B0%88OpenCV%E7%9A%84%E5%A4%9A%E5%AF%B9%E8%B1%A1%E5%8C%B9%E9%85%8D%E5%9B%BE%E5%83%8F%E7%9A%84%E5%AE%9E%E7%8E%B0%EF%BC%8C%E4%BB%A5%E5%8F%8A%E5%A6%82%E4%BD%95%E5%8C%B9%E9%85%8D%E5%8D%8A%E9%80%8F%E6%98%8E%E6%8E%A7%E4%BB%B6%EF%BC%8C%E4%B8%8D%E8%A7%84%E5%88%99%E5%9B%BE%E5%83%8F/" title="浅谈OpenCV的多对象匹配图像的实现，以及如何匹配半透明控件，不规则图像"><img class="cover" src="/cover/r3.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-03-25</div><div class="title">浅谈OpenCV的多对象匹配图像的实现，以及如何匹配半透明控件，不规则图像</div></div></a></div><div><a href="/2024/03/25/FHQ-Treap%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A-%E6%B3%A8%E9%87%8A%E6%AF%94%E4%BB%A3%E7%A0%81%E5%A4%9A%E7%B3%BB%E5%88%97/" title="FHQ_Treap从入门到精通(注释比代码多系列)"><img class="cover" src="/cover/r1.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-03-25</div><div class="title">FHQ_Treap从入门到精通(注释比代码多系列)</div></div></a></div><div><a href="/2024/03/25/ODT-%E7%8F%82%E6%9C%B5%E8%8E%89%E6%A0%91-%E5%AE%9E%E7%8E%B0%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8%EF%BC%8C%E5%B8%A6%E5%9B%BE/" title="ODT(珂朵莉树)实现及其应用，带图"><img class="cover" src="/cover/r10.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-03-25</div><div class="title">ODT(珂朵莉树)实现及其应用，带图</div></div></a></div></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://q1.qlogo.cn/g?b=qq&amp;nk=1391525377&amp;s=100" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">风的彷徨</div><div class="author-info__description">一位旅人学习心得的独角戏。不定时发布一些算法或软件相关的文章。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">25</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">34</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/futz12"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/futz12" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailme:1391525377@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">欢迎来的我的博客</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Map-%E4%B8%8E-unordered-map-%E6%A8%AA%E5%90%91%E4%B8%8E%E7%BA%B5%E5%90%91%E6%B5%8B%E8%AF%95%EF%BC%8C%E9%99%84%E5%B8%A6%E5%8E%9F%E5%A7%8B%E6%95%B0%E6%8D%AE%E4%B8%8E%E6%B5%8B%E8%AF%95%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.</span> <span class="toc-text">Map 与 unordered_map 横向与纵向测试，附带原始数据与测试程序</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-number">1.1.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E6%95%B0%E6%8D%AE-4-Byte"><span class="toc-number">1.2.</span> <span class="toc-text">简单数据(4 Byte)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%8D%E6%9D%82%E6%95%B0%E6%8D%AE-32-Byte"><span class="toc-number">1.3.</span> <span class="toc-text">复杂数据(32 Byte)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8D%E8%BD%BD%E5%92%8C%E5%87%BD%E6%95%B0%E7%9A%84%E9%80%9F%E5%BA%A6"><span class="toc-number">1.4.</span> <span class="toc-text">重载和函数的速度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.5.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8E%9F%E5%A7%8B%E6%95%B0%E6%8D%AE%E4%B8%8E%E6%B5%8B%E8%AF%95%E7%A8%8B%E5%BA%8F"><span class="toc-number">2.</span> <span class="toc-text">原始数据与测试程序</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#int-4"><span class="toc-number">2.1.</span> <span class="toc-text">int 4</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#map"><span class="toc-number">2.1.1.</span> <span class="toc-text">map</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#operator"><span class="toc-number">2.1.1.1.</span> <span class="toc-text">operator</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#insert-find"><span class="toc-number">2.1.1.2.</span> <span class="toc-text">insert &amp; find</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#unordered-map"><span class="toc-number">2.1.2.</span> <span class="toc-text">unordered_map</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#operator-1"><span class="toc-number">2.1.2.1.</span> <span class="toc-text">operator</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#insert-find-1"><span class="toc-number">2.1.2.2.</span> <span class="toc-text">insert &amp; find</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Btye-32"><span class="toc-number">2.2.</span> <span class="toc-text">Btye 32</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#map-1"><span class="toc-number">2.2.0.1.</span> <span class="toc-text">map</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#unordered-map-1"><span class="toc-number">2.2.0.2.</span> <span class="toc-text">unordered_map</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/03/25/winrt%E6%96%B0dx%E6%88%AA%E5%9B%BE%E6%9C%80%E5%B0%8F%E5%AE%9E%E7%8E%B0/" title="winrt新dx截图最小实现"><img src="/cover/r7.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="winrt新dx截图最小实现"/></a><div class="content"><a class="title" href="/2024/03/25/winrt%E6%96%B0dx%E6%88%AA%E5%9B%BE%E6%9C%80%E5%B0%8F%E5%AE%9E%E7%8E%B0/" title="winrt新dx截图最小实现">winrt新dx截图最小实现</a><time datetime="2024-03-24T16:23:22.000Z" title="Created 2024-03-25 00:23:22">2024-03-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/03/25/C%E8%AF%AD%E8%A8%80%E7%AE%80%E6%98%93%E4%B8%87%E5%B9%B4%E5%8E%86%E5%B8%A6%E6%B3%A8%E9%87%8A/" title="C语言简易万年历带注释"><img src="/cover/r9.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C语言简易万年历带注释"/></a><div class="content"><a class="title" href="/2024/03/25/C%E8%AF%AD%E8%A8%80%E7%AE%80%E6%98%93%E4%B8%87%E5%B9%B4%E5%8E%86%E5%B8%A6%E6%B3%A8%E9%87%8A/" title="C语言简易万年历带注释">C语言简易万年历带注释</a><time datetime="2024-03-24T16:22:48.000Z" title="Created 2024-03-25 00:22:48">2024-03-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/03/25/AVX256%E5%8A%A0%E9%80%9F%E7%9F%A9%E9%98%B5%E4%B9%98%E6%B3%95/" title="AVX256加速矩阵乘法"><img src="/cover/r3.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="AVX256加速矩阵乘法"/></a><div class="content"><a class="title" href="/2024/03/25/AVX256%E5%8A%A0%E9%80%9F%E7%9F%A9%E9%98%B5%E4%B9%98%E6%B3%95/" title="AVX256加速矩阵乘法">AVX256加速矩阵乘法</a><time datetime="2024-03-24T16:22:24.000Z" title="Created 2024-03-25 00:22:24">2024-03-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/03/25/AVX512%E5%8A%A0%E9%80%9F%E7%9F%A9%E9%98%B5%E4%B9%98%E6%B3%95/" title="AVX512加速矩阵乘法"><img src="/cover/r1.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="AVX512加速矩阵乘法"/></a><div class="content"><a class="title" href="/2024/03/25/AVX512%E5%8A%A0%E9%80%9F%E7%9F%A9%E9%98%B5%E4%B9%98%E6%B3%95/" title="AVX512加速矩阵乘法">AVX512加速矩阵乘法</a><time datetime="2024-03-24T16:21:43.000Z" title="Created 2024-03-25 00:21:43">2024-03-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/03/25/ORB-BEBLID-%E5%88%A9%E7%94%A8OpenCV-C-%E5%AE%9E%E7%8E%B0%E5%B0%BA%E5%BA%A6%E4%B8%8D%E5%8F%98%E6%80%A7%E4%B8%8E%E8%A7%92%E5%BA%A6%E4%B8%8D%E5%8F%98%E6%80%A7%E7%9A%84%E7%89%B9%E5%BE%81%E6%89%BE%E5%9B%BE%E7%AE%97%E6%B3%95/" title="ORB/BEBLID 利用OpenCV(C++)实现尺度不变性与角度不变性的特征找图算法"><img src="/cover/r1.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ORB/BEBLID 利用OpenCV(C++)实现尺度不变性与角度不变性的特征找图算法"/></a><div class="content"><a class="title" href="/2024/03/25/ORB-BEBLID-%E5%88%A9%E7%94%A8OpenCV-C-%E5%AE%9E%E7%8E%B0%E5%B0%BA%E5%BA%A6%E4%B8%8D%E5%8F%98%E6%80%A7%E4%B8%8E%E8%A7%92%E5%BA%A6%E4%B8%8D%E5%8F%98%E6%80%A7%E7%9A%84%E7%89%B9%E5%BE%81%E6%89%BE%E5%9B%BE%E7%AE%97%E6%B3%95/" title="ORB/BEBLID 利用OpenCV(C++)实现尺度不变性与角度不变性的特征找图算法">ORB/BEBLID 利用OpenCV(C++)实现尺度不变性与角度不变性的特征找图算法</a><time datetime="2024-03-24T16:20:36.000Z" title="Created 2024-03-25 00:20:36">2024-03-25</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By 风的彷徨</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/copy-tex.min.js"></script><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', { class: 'katex-wrap'})
+  })
+})()</script><script>(() => {
+  const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaid.length === 0) return
+  const runMermaid = () => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    Array.from($mermaid).forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+      const mermaidID = 'mermaid-' + index
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+
+      const renderV10 = () => {
+        renderFn.then(({svg}) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svg)
+        })
+      }
+
+      const renderV9 = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      typeof renderFn === 'string' ? renderV9(renderFn) : renderV10()
+    })
+  }
+
+  const loadMermaid = () => {
+    window.loadMermaid ? runMermaid() : getScript('https://cdn.jsdelivr.net/npm/mermaid@10.8.0/dist/mermaid.min.js').then(runMermaid)
+  }
+
+  btf.addGlobalFn('themeChange', runMermaid, 'mermaid')
+
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const initGitalk = () => {
+    const gitalk = new Gitalk(Object.assign({
+      clientID: 'c23b5586e893d405f9bb',
+      clientSecret: '1562b00c02d6946207cad0f4cf205deac80f6ce0',
+      repo: 'IcysBlog',
+      owner: 'futz12',
+      admin: ['futz12'],
+      id: 'cb89345e1af3411ae74f7bc9d26582c3',
+      updateCountCallback: commentCount
+    },null))
+
+    gitalk.render('gitalk-container')
+  }
+
+  const loadGitalk = async() => {
+    if (typeof Gitalk === 'function') initGitalk()
+    else {
+      await getCSS('https://cdn.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.css')
+      await getScript('https://cdn.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js')
+      initGitalk()
+    }
+  }
+  
+  const commentCount = n => {
+    const isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+    if (isCommentCount) {
+      isCommentCount.textContent= n
+    }
+  }
+
+  if ('Gitalk' === 'Gitalk' || !true) {
+    if (true) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+    else loadGitalk()
+  } else {
+    window.loadOtherComment = loadGitalk
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div></body></html>

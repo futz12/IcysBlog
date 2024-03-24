@@ -1,0 +1,286 @@
+<!DOCTYPE html><html lang="zh-cn" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>远程Call 32位远程多参数带返回调用 | 风的彷徨的博客</title><meta name="author" content="风的彷徨"><meta name="copyright" content="风的彷徨"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="[远程Call]32位远程多参数带返回调用引子 在Windows上可以使用CreateRemoteThread实现远程Call，但是有不带返回值且只能传递一个参数的限制。  解决思路 将多个参数利用VirtualAllocEx和WriteProcessMemory写入目标程序，再通过此方法注入一段shellcode，通过shellcode完成多参数的调用。  核心shellcode12345678">
+<meta property="og:type" content="article">
+<meta property="og:title" content="远程Call 32位远程多参数带返回调用">
+<meta property="og:url" content="https://www.pchar.cn/2024/03/25/%E8%BF%9C%E7%A8%8BCall-32%E4%BD%8D%E8%BF%9C%E7%A8%8B%E5%A4%9A%E5%8F%82%E6%95%B0%E5%B8%A6%E8%BF%94%E5%9B%9E%E8%B0%83%E7%94%A8/index.html">
+<meta property="og:site_name" content="风的彷徨的博客">
+<meta property="og:description" content="[远程Call]32位远程多参数带返回调用引子 在Windows上可以使用CreateRemoteThread实现远程Call，但是有不带返回值且只能传递一个参数的限制。  解决思路 将多个参数利用VirtualAllocEx和WriteProcessMemory写入目标程序，再通过此方法注入一段shellcode，通过shellcode完成多参数的调用。  核心shellcode12345678">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.pchar.cn/cover/r10.webp">
+<meta property="article:published_time" content="2024-03-24T16:18:00.000Z">
+<meta property="article:modified_time" content="2024-03-24T16:18:35.046Z">
+<meta property="article:author" content="风的彷徨">
+<meta property="article:tag" content="汇编">
+<meta property="article:tag" content="Windows">
+<meta property="article:tag" content="远程调用">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.pchar.cn/cover/r10.webp"><link rel="shortcut icon" href="/img/logo.png"><link rel="canonical" href="https://www.pchar.cn/2024/03/25/%E8%BF%9C%E7%A8%8BCall-32%E4%BD%8D%E8%BF%9C%E7%A8%8B%E5%A4%9A%E5%8F%82%E6%95%B0%E5%B8%A6%E8%BF%94%E5%9B%9E%E8%B0%83%E7%94%A8/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"Author: 风的彷徨","link":"Link: ","source":"Source: 风的彷徨的博客","info":"Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source."}},
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '远程Call 32位远程多参数带返回调用',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-03-25 00:18:35'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://q1.qlogo.cn/g?b=qq&amp;nk=1391525377&amp;s=100" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">25</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">34</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/cover/r10.webp')"><nav id="nav"><span id="blog-info"><a href="/" title="风的彷徨的博客"><span class="site-name">风的彷徨的博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">远程Call 32位远程多参数带返回调用</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-03-24T16:18:00.000Z" title="Created 2024-03-25 00:18:00">2024-03-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2024-03-24T16:18:35.046Z" title="Updated 2024-03-25 00:18:35">2024-03-25</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="远程Call 32位远程多参数带返回调用"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="远程Call-32位远程多参数带返回调用"><a href="#远程Call-32位远程多参数带返回调用" class="headerlink" title="[远程Call]32位远程多参数带返回调用"></a>[远程Call]32位远程多参数带返回调用</h1><h5 id="引子"><a href="#引子" class="headerlink" title="引子"></a>引子</h5><blockquote>
+<p>在Windows上可以使用CreateRemoteThread实现远程Call，但是有不带返回值且只能传递一个参数的限制。</p>
+</blockquote>
+<h5 id="解决思路"><a href="#解决思路" class="headerlink" title="解决思路"></a>解决思路</h5><blockquote>
+<p>将多个参数利用VirtualAllocEx和WriteProcessMemory写入目标程序，再通过此方法注入一段shellcode，通过shellcode完成多参数的调用。</p>
+</blockquote>
+<h5 id="核心shellcode"><a href="#核心shellcode" class="headerlink" title="核心shellcode"></a>核心shellcode</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">push var_1</span><br><span class="line">...</span><br><span class="line">push var_n</span><br><span class="line">mov eax,function_addr</span><br><span class="line">/*</span><br><span class="line">如果为 cdcel则需要平栈</span><br><span class="line">add esp,count_param</span><br><span class="line">*/</span><br><span class="line">call eax</span><br></pre></td></tr></table></figure>
+
+<h5 id="实现c-代码"><a href="#实现c-代码" class="headerlink" title="实现c++代码"></a>实现c++代码</h5><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;Windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;thread&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function">LPVOID <span class="title">RemoteNew</span><span class="params">(HANDLE hProcess, PUCHAR data,<span class="type">size_t</span> size)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">auto</span> hMem=<span class="built_in">VirtualAllocEx</span>(hProcess, <span class="literal">NULL</span>, size, MEM_COMMIT, PAGE_EXECUTE_READWRITE);</span><br><span class="line">    <span class="keyword">if</span> (hMem == <span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> FALSE;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">WriteProcessMemory</span>(hProcess, hMem, data, size,<span class="literal">NULL</span>) == FALSE)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">VirtualFreeEx</span>(hProcess, hMem, <span class="number">0</span>, MEM_RELEASE);</span><br><span class="line">        <span class="keyword">return</span> FALSE;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> hMem;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function">BOOL <span class="title">RemoteCall</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    HANDLE hProcess,</span></span></span><br><span class="line"><span class="params"><span class="function">    LPVOID remoteFuncAddr,</span></span></span><br><span class="line"><span class="params"><span class="function">    vector&lt;LPVOID&gt; param,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">bool</span> cdcelCall,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">bool</span> waitRemoteThread </span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (remoteFuncAddr == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> FALSE;</span><br><span class="line"></span><br><span class="line">    vector&lt;UCHAR&gt; shellcode;</span><br><span class="line">    <span class="comment">//push 结构</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = param.<span class="built_in">size</span>() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)<span class="comment">//调用栈是个栈</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (((UINT)param[i]) &lt;= <span class="number">255</span>) <span class="comment">//小参数可以只传低位</span></span><br><span class="line">            shellcode.<span class="built_in">push_back</span>(<span class="number">106</span>), shellcode.<span class="built_in">push_back</span>((UCHAR)param[i]); <span class="comment">//push byte</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            shellcode.<span class="built_in">push_back</span>(<span class="number">104</span>), shellcode.<span class="built_in">insert</span>(shellcode.<span class="built_in">end</span>(), (PUCHAR)&amp;param[i], (PUCHAR)(&amp;param[i] + <span class="number">1</span>)); <span class="comment">//push dword</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//把addr塞入寄存器</span></span><br><span class="line">    shellcode.<span class="built_in">push_back</span>(<span class="number">184</span>); <span class="comment">//mov</span></span><br><span class="line">    shellcode.<span class="built_in">insert</span>(shellcode.<span class="built_in">end</span>(), (PUCHAR)&amp;remoteFuncAddr, (PUCHAR)(&amp;remoteFuncAddr + <span class="number">1</span>)); <span class="comment">//eax,addr</span></span><br><span class="line">    shellcode.<span class="built_in">push_back</span>(<span class="number">255</span>),shellcode.<span class="built_in">push_back</span>(<span class="number">208</span>);<span class="comment">//call eax</span></span><br><span class="line"></span><br><span class="line">  </span><br><span class="line">    <span class="keyword">if</span> (cdcelCall)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">size_t</span> paramSize = param.<span class="built_in">size</span>() * <span class="built_in">sizeof</span>(LPVOID);</span><br><span class="line">        <span class="comment">//cdcel是函数调用后平栈，stdcall是函数自己平</span></span><br><span class="line">        shellcode.<span class="built_in">push_back</span>(<span class="number">129</span>), shellcode.<span class="built_in">push_back</span>(<span class="number">196</span>);<span class="comment">//add esp</span></span><br><span class="line">        shellcode.<span class="built_in">insert</span>(shellcode.<span class="built_in">end</span>(), (PUCHAR)&amp;paramSize, (PUCHAR)(&amp;paramSize + <span class="number">1</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    shellcode.<span class="built_in">push_back</span>(<span class="number">195</span>);<span class="comment">//ret</span></span><br><span class="line">    <span class="keyword">auto</span> shellcodeAddr=<span class="built_in">RemoteNew</span>(hProcess, shellcode.<span class="built_in">data</span>(), shellcode.<span class="built_in">size</span>() * <span class="built_in">sizeof</span>(UCHAR));</span><br><span class="line">    <span class="keyword">if</span> (shellcodeAddr == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> FALSE;</span><br><span class="line">   </span><br><span class="line">    <span class="keyword">auto</span> hThread=<span class="built_in">CreateRemoteThread</span>(hProcess, <span class="literal">NULL</span>, <span class="number">0</span>, (LPTHREAD_START_ROUTINE)shellcodeAddr, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">if</span> (hThread == <span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">VirtualFreeEx</span>(hProcess, shellcodeAddr, <span class="number">0</span>, MEM_RELEASE);</span><br><span class="line">        <span class="keyword">return</span> FALSE;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">thread <span class="title">waiter</span><span class="params">([hThread, hProcess, shellcodeAddr] &#123;</span></span></span><br><span class="line"><span class="params"><span class="function">        WaitForSingleObject(hThread, INFINITE);</span></span></span><br><span class="line"><span class="params"><span class="function">        VirtualFreeEx(hProcess, shellcodeAddr, <span class="number">0</span>, MEM_RELEASE);</span></span></span><br><span class="line"><span class="params"><span class="function">        DWORD retCode;</span></span></span><br><span class="line"><span class="params"><span class="function">        GetExitCodeThread(hThread, &amp;retCode);</span></span></span><br><span class="line"><span class="params"><span class="function">        cout &lt;&lt;<span class="string">&quot;Ret: &quot;</span> &lt;&lt; retCode &lt;&lt; endl;</span></span></span><br><span class="line"><span class="params"><span class="function">    &#125;)</span></span>;</span><br><span class="line">    <span class="keyword">if</span> (waitRemoteThread)</span><br><span class="line">        waiter.<span class="built_in">join</span>();</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        waiter.<span class="built_in">detach</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> TRUE;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">char</span> a[] = <span class="string">&quot;hello world&quot;</span>;</span><br><span class="line">    <span class="type">char</span> b[] = <span class="string">&quot;C++ YES&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//-1是自己</span></span><br><span class="line">    <span class="built_in">RemoteCall</span>((HANDLE)<span class="number">-1</span>, add, &#123; (LPVOID)<span class="number">1</span>,(LPVOID)<span class="number">3</span> &#125;, <span class="literal">true</span>, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> p1 = <span class="built_in">RemoteNew</span>((HANDLE)<span class="number">-1</span>, (PUCHAR)a, <span class="built_in">sizeof</span>(a));</span><br><span class="line">    <span class="keyword">auto</span> p2 = <span class="built_in">RemoteNew</span>((HANDLE)<span class="number">-1</span>, (PUCHAR)b, <span class="built_in">sizeof</span>(b));</span><br><span class="line">    <span class="built_in">RemoteCall</span>((HANDLE)<span class="number">-1</span>, MessageBoxA, &#123; <span class="number">0</span>, p1,p2,(LPVOID)<span class="number">64</span> &#125;, <span class="literal">true</span>, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Hello World!\n&quot;</span>;</span><br><span class="line">    <span class="built_in">Sleep</span>(<span class="number">-1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="实现缺陷"><a href="#实现缺陷" class="headerlink" title="实现缺陷"></a>实现缺陷</h5><ol>
+<li><p>目前只能实现32位的远程调用，64位新增了内存的可执行权限，这样注入的shellcode没法执行。</p>
+</li>
+<li><p>返回值只能接受32位整数，其实实现64位整数和浮点的方法也不复杂，都可以用汇编把对应寄存器的值写到内存里，但是情况比较多，懒得写了。</p>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://www.pchar.cn">风的彷徨</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://www.pchar.cn/2024/03/25/%E8%BF%9C%E7%A8%8BCall-32%E4%BD%8D%E8%BF%9C%E7%A8%8B%E5%A4%9A%E5%8F%82%E6%95%B0%E5%B8%A6%E8%BF%94%E5%9B%9E%E8%B0%83%E7%94%A8/">https://www.pchar.cn/2024/03/25/%E8%BF%9C%E7%A8%8BCall-32%E4%BD%8D%E8%BF%9C%E7%A8%8B%E5%A4%9A%E5%8F%82%E6%95%B0%E5%B8%A6%E8%BF%94%E5%9B%9E%E8%B0%83%E7%94%A8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%B1%87%E7%BC%96/">汇编</a><a class="post-meta__tags" href="/tags/Windows/">Windows</a><a class="post-meta__tags" href="/tags/%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/">远程调用</a></div><div class="post_share"><div class="social-share" data-image="/cover/r10.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/03/25/DX%E5%90%8E%E5%8F%B0%E6%88%AA%E5%9B%BEC-%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81/" title="DX后台截图C++实现代码"><img class="cover" src="/cover/r4.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">DX后台截图C++实现代码</div></div></a></div><div class="next-post pull-right"><a href="/2024/03/25/%E8%87%AA%E9%80%82%E5%BA%94%E8%BE%9B%E6%99%AE%E6%A3%AE%E6%B3%95%E7%A7%AF%E5%88%86%E7%AE%97%E6%B3%95%E6%8E%A8%E5%AF%BC/" title="自适应辛普森法积分算法推导"><img class="cover" src="https://img2023.cnblogs.com/blog/2468061/202307/2468061-20230707001041805-300743134.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next</div><div class="next_info">自适应辛普森法积分算法推导</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2024/03/25/AVX512%E5%8A%A0%E9%80%9F%E7%9F%A9%E9%98%B5%E4%B9%98%E6%B3%95/" title="AVX512加速矩阵乘法"><img class="cover" src="/cover/r1.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-03-25</div><div class="title">AVX512加速矩阵乘法</div></div></a></div><div><a href="/2024/03/25/AVX256%E5%8A%A0%E9%80%9F%E7%9F%A9%E9%98%B5%E4%B9%98%E6%B3%95/" title="AVX256加速矩阵乘法"><img class="cover" src="/cover/r3.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-03-25</div><div class="title">AVX256加速矩阵乘法</div></div></a></div><div><a href="/2024/03/25/DX%E5%90%8E%E5%8F%B0%E6%88%AA%E5%9B%BEC-%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81/" title="DX后台截图C++实现代码"><img class="cover" src="/cover/r4.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-03-25</div><div class="title">DX后台截图C++实现代码</div></div></a></div><div><a href="/2024/03/25/C-%E5%88%A4%E6%96%AD%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%BD%8D%E6%95%B0/" title="C++判断操作系统位数"><img class="cover" src="/cover/r9.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-03-25</div><div class="title">C++判断操作系统位数</div></div></a></div><div><a href="/2024/03/25/32%E4%BD%8D%E7%A8%8B%E5%BA%8F%E8%8E%B7%E5%8F%9632-64%E4%BD%8D%E8%BF%9B%E7%A8%8B%E6%96%87%E4%BB%B6%E5%9C%B0%E5%9D%80%E9%80%9A%E7%94%A8%E6%96%B9%E6%B3%95/" title="32位程序获取32&#x2F;64位进程文件地址通用方法"><img class="cover" src="/cover/r2.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-03-25</div><div class="title">32位程序获取32&#x2F;64位进程文件地址通用方法</div></div></a></div><div><a href="/2024/03/25/C-%E5%88%A4%E6%96%AD%E6%9F%90%E8%BF%9B%E7%A8%8B%E6%98%AF%E5%90%A6%E6%9C%89%E7%AE%A1%E7%90%86%E5%91%98%E6%9D%83%E9%99%90/" title="C++判断某进程是否有管理员权限"><img class="cover" src="/cover/r1.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-03-25</div><div class="title">C++判断某进程是否有管理员权限</div></div></a></div></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://q1.qlogo.cn/g?b=qq&amp;nk=1391525377&amp;s=100" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">风的彷徨</div><div class="author-info__description">一位旅人学习心得的独角戏。不定时发布一些算法或软件相关的文章。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">25</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">34</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/futz12"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/futz12" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailme:1391525377@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">欢迎来的我的博客</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8BCall-32%E4%BD%8D%E8%BF%9C%E7%A8%8B%E5%A4%9A%E5%8F%82%E6%95%B0%E5%B8%A6%E8%BF%94%E5%9B%9E%E8%B0%83%E7%94%A8"><span class="toc-number">1.</span> <span class="toc-text">[远程Call]32位远程多参数带返回调用</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%BC%95%E5%AD%90"><span class="toc-number">1.0.0.0.1.</span> <span class="toc-text">引子</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%80%9D%E8%B7%AF"><span class="toc-number">1.0.0.0.2.</span> <span class="toc-text">解决思路</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83shellcode"><span class="toc-number">1.0.0.0.3.</span> <span class="toc-text">核心shellcode</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0c-%E4%BB%A3%E7%A0%81"><span class="toc-number">1.0.0.0.4.</span> <span class="toc-text">实现c++代码</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E7%BC%BA%E9%99%B7"><span class="toc-number">1.0.0.0.5.</span> <span class="toc-text">实现缺陷</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/03/25/winrt%E6%96%B0dx%E6%88%AA%E5%9B%BE%E6%9C%80%E5%B0%8F%E5%AE%9E%E7%8E%B0/" title="winrt新dx截图最小实现"><img src="/cover/r7.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="winrt新dx截图最小实现"/></a><div class="content"><a class="title" href="/2024/03/25/winrt%E6%96%B0dx%E6%88%AA%E5%9B%BE%E6%9C%80%E5%B0%8F%E5%AE%9E%E7%8E%B0/" title="winrt新dx截图最小实现">winrt新dx截图最小实现</a><time datetime="2024-03-24T16:23:22.000Z" title="Created 2024-03-25 00:23:22">2024-03-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/03/25/C%E8%AF%AD%E8%A8%80%E7%AE%80%E6%98%93%E4%B8%87%E5%B9%B4%E5%8E%86%E5%B8%A6%E6%B3%A8%E9%87%8A/" title="C语言简易万年历带注释"><img src="/cover/r9.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C语言简易万年历带注释"/></a><div class="content"><a class="title" href="/2024/03/25/C%E8%AF%AD%E8%A8%80%E7%AE%80%E6%98%93%E4%B8%87%E5%B9%B4%E5%8E%86%E5%B8%A6%E6%B3%A8%E9%87%8A/" title="C语言简易万年历带注释">C语言简易万年历带注释</a><time datetime="2024-03-24T16:22:48.000Z" title="Created 2024-03-25 00:22:48">2024-03-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/03/25/AVX256%E5%8A%A0%E9%80%9F%E7%9F%A9%E9%98%B5%E4%B9%98%E6%B3%95/" title="AVX256加速矩阵乘法"><img src="/cover/r3.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="AVX256加速矩阵乘法"/></a><div class="content"><a class="title" href="/2024/03/25/AVX256%E5%8A%A0%E9%80%9F%E7%9F%A9%E9%98%B5%E4%B9%98%E6%B3%95/" title="AVX256加速矩阵乘法">AVX256加速矩阵乘法</a><time datetime="2024-03-24T16:22:24.000Z" title="Created 2024-03-25 00:22:24">2024-03-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/03/25/AVX512%E5%8A%A0%E9%80%9F%E7%9F%A9%E9%98%B5%E4%B9%98%E6%B3%95/" title="AVX512加速矩阵乘法"><img src="/cover/r1.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="AVX512加速矩阵乘法"/></a><div class="content"><a class="title" href="/2024/03/25/AVX512%E5%8A%A0%E9%80%9F%E7%9F%A9%E9%98%B5%E4%B9%98%E6%B3%95/" title="AVX512加速矩阵乘法">AVX512加速矩阵乘法</a><time datetime="2024-03-24T16:21:43.000Z" title="Created 2024-03-25 00:21:43">2024-03-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/03/25/ORB-BEBLID-%E5%88%A9%E7%94%A8OpenCV-C-%E5%AE%9E%E7%8E%B0%E5%B0%BA%E5%BA%A6%E4%B8%8D%E5%8F%98%E6%80%A7%E4%B8%8E%E8%A7%92%E5%BA%A6%E4%B8%8D%E5%8F%98%E6%80%A7%E7%9A%84%E7%89%B9%E5%BE%81%E6%89%BE%E5%9B%BE%E7%AE%97%E6%B3%95/" title="ORB/BEBLID 利用OpenCV(C++)实现尺度不变性与角度不变性的特征找图算法"><img src="/cover/r1.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ORB/BEBLID 利用OpenCV(C++)实现尺度不变性与角度不变性的特征找图算法"/></a><div class="content"><a class="title" href="/2024/03/25/ORB-BEBLID-%E5%88%A9%E7%94%A8OpenCV-C-%E5%AE%9E%E7%8E%B0%E5%B0%BA%E5%BA%A6%E4%B8%8D%E5%8F%98%E6%80%A7%E4%B8%8E%E8%A7%92%E5%BA%A6%E4%B8%8D%E5%8F%98%E6%80%A7%E7%9A%84%E7%89%B9%E5%BE%81%E6%89%BE%E5%9B%BE%E7%AE%97%E6%B3%95/" title="ORB/BEBLID 利用OpenCV(C++)实现尺度不变性与角度不变性的特征找图算法">ORB/BEBLID 利用OpenCV(C++)实现尺度不变性与角度不变性的特征找图算法</a><time datetime="2024-03-24T16:20:36.000Z" title="Created 2024-03-25 00:20:36">2024-03-25</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By 风的彷徨</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/copy-tex.min.js"></script><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', { class: 'katex-wrap'})
+  })
+})()</script><script>(() => {
+  const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaid.length === 0) return
+  const runMermaid = () => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    Array.from($mermaid).forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+      const mermaidID = 'mermaid-' + index
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+
+      const renderV10 = () => {
+        renderFn.then(({svg}) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svg)
+        })
+      }
+
+      const renderV9 = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      typeof renderFn === 'string' ? renderV9(renderFn) : renderV10()
+    })
+  }
+
+  const loadMermaid = () => {
+    window.loadMermaid ? runMermaid() : getScript('https://cdn.jsdelivr.net/npm/mermaid@10.8.0/dist/mermaid.min.js').then(runMermaid)
+  }
+
+  btf.addGlobalFn('themeChange', runMermaid, 'mermaid')
+
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const initGitalk = () => {
+    const gitalk = new Gitalk(Object.assign({
+      clientID: 'c23b5586e893d405f9bb',
+      clientSecret: '1562b00c02d6946207cad0f4cf205deac80f6ce0',
+      repo: 'IcysBlog',
+      owner: 'futz12',
+      admin: ['futz12'],
+      id: '509722d50e21250f4ab46cf03d8c9301',
+      updateCountCallback: commentCount
+    },null))
+
+    gitalk.render('gitalk-container')
+  }
+
+  const loadGitalk = async() => {
+    if (typeof Gitalk === 'function') initGitalk()
+    else {
+      await getCSS('https://cdn.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.css')
+      await getScript('https://cdn.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js')
+      initGitalk()
+    }
+  }
+  
+  const commentCount = n => {
+    const isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+    if (isCommentCount) {
+      isCommentCount.textContent= n
+    }
+  }
+
+  if ('Gitalk' === 'Gitalk' || !true) {
+    if (true) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+    else loadGitalk()
+  } else {
+    window.loadOtherComment = loadGitalk
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div></body></html>
