@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.pchar.cn/2024/03/26/%E4%BD%BF%E7%94%A8%20OpenCV%20%E8%BF%9B%E8%A1%8C%E6%96%87%E6%A1%A3%E7%9F%AB%E6%AD%A3/</loc>
+    
+    <lastmod>2024-03-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://www.pchar.cn/categories/index.html</loc>
     
     <lastmod>2024-03-25</lastmod>
@@ -492,5 +501,12 @@
   </url>
   
 
+  
+  <url>
+    <loc>https://www.pchar.cn/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/</loc>
+    <lastmod>2024-03-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
   
 </urlset>
