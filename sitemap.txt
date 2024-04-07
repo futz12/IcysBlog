@@ -1,3 +1,4 @@
+https://www.pchar.cn/2024/04/07/Transformer%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A(The%20Annotated%20Transformer)/
 https://www.pchar.cn/2024/03/29/%E5%B1%B1%E4%B8%9C%E5%A4%A7%E5%AD%A623%E5%BC%BA%E5%9F%BA%E7%8F%AD%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AF%BC%E8%AE%BA%E7%AC%AC%E5%9B%9B%E6%AC%A1%E4%B9%A0%E9%A2%98%E7%AD%94%E6%A1%88/
 https://www.pchar.cn/2024/03/25/ODT-%E7%8F%82%E6%9C%B5%E8%8E%89%E6%A0%91-%E5%AE%9E%E7%8E%B0%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8%EF%BC%8C%E5%B8%A6%E5%9B%BE/
 https://www.pchar.cn/2024/03/26/%E4%BD%BF%E7%94%A8%20OpenCV%20%E8%BF%9B%E8%A1%8C%E6%96%87%E6%A1%A3%E7%9F%AB%E6%AD%A3/
@@ -63,5 +64,8 @@ https://www.pchar.cn/tags/%E8%AE%A1%E7%AE%97%E6%95%B0%E5%AD%A6/
 https://www.pchar.cn/tags/%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/
 https://www.pchar.cn/tags/%E6%84%9F%E6%82%9F/
 https://www.pchar.cn/tags/%E5%B1%B1%E4%B8%9C%E5%A4%A7%E5%AD%A6%E4%B9%A0%E9%A2%98-C-C/
+https://www.pchar.cn/tags/Transformer/
+https://www.pchar.cn/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/
 https://www.pchar.cn/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/
 https://www.pchar.cn/categories/%E5%B1%B1%E4%B8%9C%E5%A4%A7%E5%AD%A6%E4%B9%A0%E9%A2%98/
+https://www.pchar.cn/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/
